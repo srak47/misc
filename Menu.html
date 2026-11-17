@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Menu Maker – Annapurna Ruchulu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<style>
+:root{--maroon:#6B1E1E;--cream:#FBF5E6;--ink:#3B1414;--muted:#6B4A3A;--line:#E8D9B5}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:'Inter',system-ui,sans-serif;line-height:1.45}
+.wrap{max-width:1180px;margin:0 auto;padding:24px 16px 56px}
+h1{font-family:'Playfair Display',serif;color:var(--maroon);font-size:30px;margin:0 0 4px}
+.sub{margin:0 0 24px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:20px}
+.panel h2{font-size:16px;margin:0 0 12px;color:var(--maroon)}
+label{display:block;font-size:13px;font-weight:500;color:var(--muted);margin:10px 0 4px}
+input[type=text],select{width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1px solid #D9C79A;border-radius:10px;background:#fffdf7;color:var(--ink);min-height:44px}
+input[type=text]:focus,select:focus{outline:3px solid #F2C14E;outline-offset:1px}
+.item{border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0;background:#fffdf7}
+.row{display:grid;grid-template-columns:minmax(0,1fr) 90px 80px;gap:8px;margin-bottom:8px}
+.row2{display:grid;grid-template-columns:150px minmax(0,1fr);gap:8px}
+@media(max-width:480px){.row{grid-template-columns:minmax(0,1fr) 1fr 1fr}.row .nm{grid-column:1 / -1}.row2{grid-template-columns:minmax(0,1fr)}}
+.item .cat{margin-bottom:8px}
+.small{font-size:12px;color:var(--muted);margin:4px 0 0}
+button{font:inherit;font-weight:600;border:0;border-radius:10px;padding:10px 16px;min-height:44px;cursor:pointer}
+.primary{background:var(--maroon);color:#fff}
+.primary:hover{background:#561515}
+.ghost{background:#fff;color:var(--maroon);border:1px solid var(--maroon)}
+.danger{background:transparent;color:#8A2A2A;padding:6px 8px;min-height:36px;font-weight:500;font-size:13px}
+button:focus-visible{outline:3px solid #F2C14E;outline-offset:2px}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;align-items:center}
+.status{min-height:22px;margin-top:10px;font-size:14px;color:#2F5D3A}
+.themes{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:flex;align-items:center;gap:8px;background:#fff;color:var(--ink);border:2px solid var(--line);border-radius:999px;padding:6px 14px 6px 8px;min-height:44px;font-weight:500}
+.chip[aria-pressed=true]{border-color:var(--maroon);background:#FFF6DC}
+.sw{width:26px;height:26px;border-radius:50%;display:inline-block;border:2px solid #fff;box-shadow:0 0 0 1px #CDB98A;flex:none}
+.photo-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.photo-row img{width:84px;height:56px;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
+input[type=file]{font-size:14px;max-width:100%}
+.menu{--h:#6B1E1E;--ht:#FBF5E6;--a:#E39B1B;--a2:#F2C14E;--bg:#FBF5E6;--ink:#3B1414;--mu:#6B4A3A;--c:#6B1E1E;--p:#6B1E1E;--dot:#CDB98A;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.menu-head{background:var(--h);color:var(--ht);text-align:center;padding:28px 20px 24px}
+.menu-head .nm{font-family:'Playfair Display',serif;font-weight:700;font-size:34px;line-height:1.1;margin-top:10px}
+.menu-head .tg{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--a2);margin-top:8px}
+.hero{display:block;width:100%;height:170px;object-fit:cover}
+.bar{height:5px;background:var(--a)}
+.menu-body{padding:20px 24px 8px}
+.cat-h{display:flex;align-items:center;gap:10px;font-family:'Playfair Display',serif;font-weight:700;color:var(--c);font-size:22px;border-bottom:2px solid var(--a);padding-bottom:4px;margin:18px 0 8px}
+.cat-h:first-child{margin-top:4px}
+.mi{padding:6px 0}
+.mi .line{display:flex;align-items:baseline;gap:8px}
+.mi .n{font-weight:600}
+.mi .q{font-size:13px;color:var(--mu)}
+.mi .dots{flex:1;border-bottom:2px dotted var(--dot);transform:translateY(-4px);min-width:12px}
+.mi .p{font-weight:700;color:var(--p)}
+.mi .d{font-size:13px;color:var(--mu);margin-top:1px}
+.badge{font-size:11px;font-weight:700;background:var(--a);color:var(--h);border-radius:999px;padding:2px 9px;white-space:nowrap}
+.menu-foot{padding:8px 24px 24px;text-align:center;color:var(--mu);font-size:14px}
+.menu-foot .note{font-weight:600;color:var(--ink)}
+.menu-foot .fl{font-size:12px;margin-top:8px;font-style:italic}
+.qrbox{margin:14px auto 4px;display:inline-block;background:#fff;padding:10px;border-radius:10px}
+.qrbox svg{display:block}
+.qrcap{font-weight:600;color:var(--c);margin-top:2px}
+.imgbox{margin-top:16px}
+.imgbox img{width:100%;height:auto;border-radius:12px;border:1px solid var(--line);display:block}
+.empty{color:var(--mu);text-align:center;padding:16px}
+</style>
+</head>
+<body>
+<noscript><div style="background:#8A2A2A;color:#fff;padding:14px 16px;font-family:system-ui,sans-serif;font-size:16px">This page needs JavaScript. If buttons do nothing, you are probably viewing a preview. Open the file in your phone or computer browser (Chrome or Safari) instead.</div></noscript>
+<div class="wrap">
+<h1>Menu Maker</h1>
+<p class="sub">Type your items, pick a look, and the menu updates as you type. Then copy it as text or make an image to post.</p>
+
+<div class="grid">
+<div>
+<section class="panel" aria-label="Look and size">
+<h2>Look</h2>
+<div class="themes" id="themes" role="group" aria-label="Menu theme"></div>
+<label for="sz">Image size</label>
+<select id="sz"></select>
+<label style="display:flex;align-items:center;gap:10px;margin-top:14px;font-size:15px;color:var(--ink)"><input type="checkbox" id="si" style="width:22px;height:22px"> Show ingredients on the menu</label>
+<label for="ph">Photo strip (optional, your own food photo)</label>
+<div class="photo-row">
+<input type="file" id="ph" accept="image/*">
+<img id="phThumb" alt="" hidden>
+<button type="button" class="danger" id="phRm" hidden>Remove photo</button>
+</div>
+<p class="small">The photo is used only on this page and is not saved. Add it again next time.</p>
+</section>
+
+<section class="panel" aria-label="Menu details">
+<h2>Your details</h2>
+<label for="bn">Business name</label>
+<input type="text" id="bn" autocomplete="off">
+<label for="tg">Tagline</label>
+<input type="text" id="tg" autocomplete="off">
+<label for="oi">Order deadline line (for example: Order by Wednesday)</label>
+<input type="text" id="oi" autocomplete="off">
+<label for="pk">Pickup or delivery line (for example: Pickup Saturday in Frisco)</label>
+<input type="text" id="pk" autocomplete="off">
+<label for="ct">Contact line (phone, Instagram)</label>
+<input type="text" id="ct" autocomplete="off">
+<label for="qr">QR code link (optional)</label>
+<input type="text" id="qr" autocomplete="off" placeholder="https://wa.me/1XXXXXXXXXX or your Instagram link">
+<p class="small">For WhatsApp, use wa.me/ followed by your number with country code, digits only.</p>
+<label for="qc">QR caption</label>
+<input type="text" id="qc" autocomplete="off">
+<label for="ft">Footer line (optional)</label>
+<input type="text" id="ft" autocomplete="off">
+<p class="small">Texas cottage food labels have required wording. Check the DSHS cottage food page and paste the exact wording here if you want it on the menu.</p>
+</section>
+
+<section class="panel" aria-label="Share or back up">
+<h2>Share or move your menu</h2>
+<p class="small" style="margin:0 0 8px">Your menu is saved only in this browser. To use it on another phone or computer, or to send it to someone, copy the menu code, then paste it into the same page there.</p>
+<div class="actions" style="margin-top:8px"><button type="button" class="ghost" id="copyCode">Copy menu code</button></div>
+<label for="codeIn">Paste a menu code here to load it</label>
+<input type="text" id="codeIn" autocomplete="off" placeholder="Paste menu code">
+<div class="actions" style="margin-top:8px"><button type="button" class="ghost" id="loadCode">Load menu code</button></div>
+<div class="status" id="codeStatus" role="status" aria-live="polite"></div>
+</section>
+
+<section class="panel" aria-label="Menu items">
+<h2>Menu items</h2>
+<p class="small" style="margin:0 0 4px">Items with the same category are grouped. Category names like Snacks, Sweets, Podis, Pickles, Chai, and Gift Boxes get their own small icon. Enter price as a number (8) or text.</p>
+<div id="items"></div>
+<div class="actions">
+<button type="button" class="ghost" id="add">+ Add item</button>
+<button type="button" class="ghost" id="addBox">+ Add combo / gift box</button>
+<button type="button" class="ghost" id="clear">Clear all</button>
+</div>
+</section>
+</div>
+
+<section aria-label="Menu preview">
+<div class="panel">
+<h2>Preview</h2>
+<div class="menu" id="menu"></div>
+<div class="actions">
+<button type="button" class="primary" id="copyText">Copy as text</button>
+<button type="button" class="primary" id="makeImg">Make image</button>
+</div>
+<div class="status" id="status" role="status" aria-live="polite"></div>
+<div class="imgbox" id="imgbox"></div>
+</div>
+</section>
+</div>
+</div>
+
+<script>
+(function(){
+var KEY='menuMakerAnnapurna2';
+var THEMES={
+classic:{label:'Classic',head:'#6B1E1E',ht:'#FBF5E6',a:'#E39B1B',a2:'#F2C14E',pa:'#E39B1B',pb:'#F2C14E',bg:'#FBF5E6',ink:'#3B1414',mu:'#6B4A3A',c:'#6B1E1E',p:'#6B1E1E',dot:'#CDB98A'},
+diwali:{label:'Diwali',head:'#2A1250',ht:'#FFF3D6',a:'#F5A623',a2:'#FFD166',pa:'#F5A623',pb:'#FFD166',bg:'#FFF7E8',ink:'#2A1250',mu:'#5E4A6B',c:'#2A1250',p:'#8A1C4A',dot:'#D9C3A0'},
+harvest:{label:'Sankranti / Ugadi',head:'#1F5A3A',ht:'#FFF9E3',a:'#F28C28',a2:'#FFD23F',pa:'#F28C28',pb:'#FFD23F',bg:'#FFF9E3',ink:'#16301F',mu:'#55603F',c:'#1F5A3A',p:'#A8480B',dot:'#D6CC95'},
+holi:{label:'Holi',head:'#7B2A86',ht:'#FFF4F0',a:'#FF7A45',a2:'#FFC93C',pa:'#FF7A45',pb:'#FFC93C',bg:'#FFF6F0',ink:'#3A1642',mu:'#6B4A70',c:'#7B2A86',p:'#B0235E',dot:'#E3C6C0'},
+christmas:{label:'Christmas',head:'#8B1A1A',ht:'#FFF8EC',a:'#2F6B3A',a2:'#D9B44A',pa:'#D9B44A',pb:'#F3DC8A',bg:'#FFF9F0',ink:'#3A1414',mu:'#5F4A3A',c:'#2F6B3A',p:'#8B1A1A',dot:'#D6C9A8'}
+};
+var SIZES={post:{label:'Post (height fits the menu)',h:0},story:{label:'Story 1080 × 1920',h:1920},square:{label:'Square 1080 × 1080',h:1080}};
+var BADGES=['','Bestseller','New','Festival special'];
+var ICONS={
+snack:'M12 12a1.5 1.5 0 0 1 3 0a4.5 4.5 0 0 1 -9 0a7.5 7.5 0 0 1 15 0',
+sweet:'M12 4a8 8 0 1 0 0.01 0z M9 10h.01 M14 9h.01 M12 14h.01 M16 13h.01 M8 14h.01',
+podi:'M3 11h18a9 8 0 0 1 -18 0z M7 11q5 -6 10 0',
+pickle:'M8 3h8 M7 6h10v14a1 1 0 0 1 -1 1h-8a1 1 0 0 1 -1 -1z M7 10h10',
+drink:'M5 8h12v7a4 4 0 0 1 -4 4H9a4 4 0 0 1 -4 -4z M17 10h2a2 2 0 0 1 0 5h-2 M8 3v2 M12 3v2',
+box:'M4 10h16v10H4z M3 7h18v3H3z M12 7v13 M12 7c-3 -4 -6 -1 -4 0 M12 7c3 -4 6 -1 4 0',
+leaf:'M5 19c0 -8 5 -14 14 -14 0 9 -6 14 -14 14z M5 19L13 11'
+};
+function iconFor(cat){
+var c=String(cat||'').toLowerCase();
+if(/snack|savou?ry|namkeen|chakli|chakra|murukku/.test(c))return 'snack';
+if(/sweet|mithai|laddu|ladoo|dessert/.test(c))return 'sweet';
+if(/podi|powder|masala|spice/.test(c))return 'podi';
+if(/pickle|chutney|pachadi|achar/.test(c))return 'pickle';
+if(/chai|drink|coffee|tea/.test(c))return 'drink';
+if(/box|gift|combo|hamper/.test(c))return 'box';
+return 'leaf';
+}
+var defaults={
+name:'Annapurna Ruchulu',tagline:'Tastes of Home',
+orderInfo:'Pre-order 2 days ahead',pickup:'',contact:'Dallas, TX · Order: [your phone or Instagram]',
+qr:'',qrLabel:'Scan to order',footer:'',theme:'classic',size:'post',showIng:true,
+items:[
+{cat:'Snacks',name:'Chakralu (Murukku)',qty:'200 g',price:'8',badge:'Bestseller',desc:''},
+{cat:'Snacks',name:'Kara Boondi',qty:'200 g',price:'7',badge:'',desc:''},
+{cat:'Sweets',name:'Sunnundalu',qty:'6 pcs',price:'12',badge:'',desc:''},
+{cat:'Sweets',name:'Ariselu',qty:'6 pcs',price:'12',badge:'New',desc:''},
+{cat:'Podis',name:'Kandi Podi',qty:'150 g',price:'9',badge:'',desc:''},
+{cat:'Podis',name:'Idli Podi',qty:'150 g',price:'9',badge:'',desc:''}
+]};
+var state=load();
+var photo=null,photoUrl='';
+
+function load(){
+var o=null;
+try{var s=localStorage.getItem(KEY);if(s)o=JSON.parse(s);}catch(e){}
+var st=JSON.parse(JSON.stringify(defaults));
+if(o&&typeof o==='object'){
+Object.keys(st).forEach(function(k){if(k!=='items'&&o[k]!==undefined)st[k]=o[k];});
+if(Array.isArray(o.items))st.items=o.items.map(function(it){return {cat:it.cat||'',name:it.name||'',qty:it.qty||'',price:it.price||'',badge:it.badge||'',desc:it.desc||'',ingredients:it.ingredients||''};});
+}
+if(!THEMES[st.theme])st.theme='classic';
+if(!SIZES[st.size])st.size='post';
+return st;
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function fmtPrice(p){p=String(p||'').trim();if(!p)return '';return /^\d+(\.\d+)?$/.test(p)?'$'+p:p;}
+function groups(){
+var order=[],map={};
+state.items.forEach(function(it){
+if(!String(it.name).trim())return;
+var c=String(it.cat||'').trim()||'Menu';
+if(!map[c]){map[c]=[];order.push(c);}
+map[c].push(it);
+});
+return order.map(function(c){return {cat:c,items:map[c]};});
+}
+var $=function(id){return document.getElementById(id);};
+
+[['bn','name'],['tg','tagline'],['oi','orderInfo'],['pk','pickup'],['ct','contact'],['qr','qr'],['qc','qrLabel'],['ft','footer']].forEach(function(p){
+var el=$(p[0]);el.value=state[p[1]]||'';
+el.addEventListener('input',function(){state[p[1]]=el.value;save();renderMenu();});
+});
+
+/* themes + size */
+function renderThemes(){
+var box=$('themes');box.innerHTML='';
+Object.keys(THEMES).forEach(function(k){
+var t=THEMES[k],b=document.createElement('button');
+b.type='button';b.className='chip';b.setAttribute('aria-pressed',state.theme===k?'true':'false');
+b.innerHTML='<span class="sw" style="background:linear-gradient(135deg,'+t.head+' 50%,'+t.a+' 50%)"></span>'+esc(t.label);
+b.addEventListener('click',function(){state.theme=k;save();renderThemes();renderMenu();});
+box.appendChild(b);
+});
+}
+var sz=$('sz');
+Object.keys(SIZES).forEach(function(k){var o=document.createElement('option');o.value=k;o.textContent=SIZES[k].label;sz.appendChild(o);});
+sz.value=state.size;
+sz.addEventListener('change',function(){state.size=sz.value;save();});
+$('si').checked=state.showIng!==false;
+$('si').addEventListener('change',function(){state.showIng=$('si').checked;save();renderMenu();});
+
+/* photo */
+$('ph').addEventListener('change',function(e){
+var f=e.target.files&&e.target.files[0];if(!f)return;
+if(photoUrl)URL.revokeObjectURL(photoUrl);
+photoUrl=URL.createObjectURL(f);
+var im=new Image();
+im.onload=function(){photo=im;$('phThumb').src=photoUrl;$('phThumb').hidden=false;$('phRm').hidden=false;renderMenu();};
+im.onerror=function(){say('That file could not be read as an image.',true);};
+im.src=photoUrl;
+});
+$('phRm').addEventListener('click',function(){
+photo=null;if(photoUrl)URL.revokeObjectURL(photoUrl);photoUrl='';
+$('ph').value='';$('phThumb').hidden=true;$('phRm').hidden=true;renderMenu();
+});
+
+/* items form */
+function renderItems(){
+var box=$('items');box.innerHTML='';
+state.items.forEach(function(it,i){
+var d=document.createElement('div');d.className='item';d.setAttribute('data-i',i);
+var opts=BADGES.map(function(b){return '<option value="'+esc(b)+'"'+(it.badge===b?' selected':'')+'>'+(b||'No badge')+'</option>';}).join('');
+d.innerHTML=
+'<div class="cat"><label for="c'+i+'" style="margin-top:0">Category</label><input type="text" id="c'+i+'" value="'+esc(it.cat)+'" data-k="cat" autocomplete="off"></div>'+
+'<div class="row">'+
+'<div class="nm"><label for="n'+i+'" style="margin-top:0">Item</label><input type="text" id="n'+i+'" value="'+esc(it.name)+'" data-k="name" autocomplete="off"></div>'+
+'<div><label for="q'+i+'" style="margin-top:0">Qty / size</label><input type="text" id="q'+i+'" value="'+esc(it.qty)+'" data-k="qty" autocomplete="off"></div>'+
+'<div><label for="p'+i+'" style="margin-top:0">Price</label><input type="text" id="p'+i+'" value="'+esc(it.price)+'" data-k="price" inputmode="decimal" autocomplete="off"></div>'+
+'</div>'+
+'<div class="row2">'+
+'<div><label for="b'+i+'" style="margin-top:0">Badge</label><select id="b'+i+'" data-k="badge">'+opts+'</select></div>'+
+'<div><label for="d'+i+'" style="margin-top:0">Description (optional)</label><input type="text" id="d'+i+'" value="'+esc(it.desc)+'" data-k="desc" placeholder="e.g. 1 sweet + 1 snack + 1 podi" autocomplete="off"></div>'+
+'</div>'+
+'<div style="margin-top:8px"><label for="g'+i+'" style="margin-top:0">Ingredients and allergens (optional)</label><input type="text" id="g'+i+'" value="'+esc(it.ingredients||'')+'" data-k="ingredients" placeholder="e.g. rice flour, jaggery, sesame (contains: sesame)" autocomplete="off"></div>'+
+'<div style="text-align:right"><button type="button" class="danger" data-rm="'+i+'">Remove</button></div>';
+box.appendChild(d);
+});
+}
+$('items').addEventListener('input',onField);
+$('items').addEventListener('change',onField);
+function onField(e){
+var t=e.target,k=t.getAttribute&&t.getAttribute('data-k');if(!k)return;
+var row=t.closest('.item');if(!row)return;
+var idx=+row.getAttribute('data-i');
+if(state.items[idx]){state.items[idx][k]=t.value;save();renderMenu();}
+}
+$('items').addEventListener('click',function(e){
+var b=e.target.closest&&e.target.closest('[data-rm]');if(!b)return;
+state.items.splice(+b.getAttribute('data-rm'),1);save();renderItems();renderMenu();
+});
+function addItem(it){
+state.items.push(it);save();renderItems();renderMenu();
+var ins=$('items').querySelectorAll('input[data-k="name"]');if(ins.length)ins[ins.length-1].focus();
+}
+$('add').addEventListener('click',function(){
+var last=state.items.length?state.items[state.items.length-1].cat:'';
+addItem({cat:last,name:'',qty:'',price:'',badge:'',desc:''});
+});
+$('addBox').addEventListener('click',function(){
+addItem({cat:'Gift Boxes',name:'',qty:'',price:'',badge:'Festival special',desc:''});
+});
+$('clear').addEventListener('click',function(){
+var b=$('clear');
+if(state.items.length&&b.getAttribute('data-sure')!=='1'){
+b.setAttribute('data-sure','1');b.textContent='Tap again to clear all';
+setTimeout(function(){b.removeAttribute('data-sure');b.textContent='Clear all';},3000);return;
+}
+b.removeAttribute('data-sure');b.textContent='Clear all';
+state.items=[];save();renderItems();renderMenu();
+});
+
+/* svg helpers */
+function iconSVG(cat,size,color){
+return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 24 24" fill="none" stroke="'+color+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="'+ICONS[iconFor(cat)]+'"/></svg>';
+}
+function flowerSVG(size,T){
+var cols=[T.pa,T.pb],s='<svg width="'+size+'" height="'+size+'" viewBox="0 0 120 120" role="img" aria-label="Flower logo"><g transform="translate(60 60)">';
+for(var i=0;i<8;i++){s+='<ellipse cx="0" cy="-30" rx="11" ry="26" fill="'+cols[i%2]+'" transform="rotate('+(i*45)+')"/>';}
+return s+'<circle r="14" fill="'+T.head+'"/><circle r="7" fill="'+T.ht+'"/></g></svg>';
+}
+function qrModel(){
+var url=String(state.qr||'').trim();
+if(!url||typeof qrcode!=='function')return null;
+try{var q=qrcode(0,'M');q.addData(url);q.make();return q;}catch(e){return null;}
+}
+function qrSVG(q,px){
+var n=q.getModuleCount(),m=px/(n+0),d='';
+for(var r=0;r<n;r++)for(var c=0;c<n;c++)if(q.isDark(r,c))d+='M'+c+' '+r+'h1v1h-1z';
+return '<svg width="'+px+'" height="'+px+'" viewBox="0 0 '+n+' '+n+'" shape-rendering="crispEdges" role="img" aria-label="QR code"><path d="'+d+'" fill="#1A1A1A"/></svg>';
+}
+
+/* preview */
+function renderMenu(){
+var T=THEMES[state.theme]||THEMES.classic,g=groups(),h='';
+var m=$('menu');
+m.style.setProperty('--h',T.head);m.style.setProperty('--ht',T.ht);m.style.setProperty('--a',T.a);m.style.setProperty('--a2',T.a2);
+m.style.setProperty('--bg',T.bg);m.style.setProperty('--ink',T.ink);m.style.setProperty('--mu',T.mu);m.style.setProperty('--c',T.c);m.style.setProperty('--p',T.p);m.style.setProperty('--dot',T.dot);
+h+='<div class="menu-head">'+flowerSVG(64,T)+'<div class="nm">'+esc(state.name||'')+'</div>'+(state.tagline?'<div class="tg">'+esc(state.tagline)+'</div>':'')+'</div>';
+if(photo)h+='<img class="hero" src="'+photoUrl+'" alt="">';
+h+='<div class="bar"></div><div class="menu-body">';
+if(!g.length)h+='<div class="empty">Add an item to see your menu.</div>';
+g.forEach(function(gr){
+h+='<div class="cat-h">'+iconSVG(gr.cat,26,T.c)+'<span>'+esc(gr.cat)+'</span></div>';
+gr.items.forEach(function(it){
+h+='<div class="mi"><div class="line"><span class="n">'+esc(it.name)+'</span>'+(it.qty?'<span class="q">'+esc(it.qty)+'</span>':'')+(it.badge?'<span class="badge">'+esc(it.badge)+'</span>':'')+'<span class="dots"></span><span class="p">'+esc(fmtPrice(it.price))+'</span></div>'+(it.desc?'<div class="d">'+esc(it.desc)+'</div>':'')+(state.showIng!==false&&it.ingredients?'<div class="d"><em>Ingredients: '+esc(it.ingredients)+'</em></div>':'')+'</div>';
+});
+});
+h+='</div><div class="menu-foot">';
+if(state.orderInfo)h+='<div class="note">'+esc(state.orderInfo)+'</div>';
+if(state.pickup)h+='<div>'+esc(state.pickup)+'</div>';
+if(state.contact)h+='<div>'+esc(state.contact)+'</div>';
+var q=qrModel();
+if(q){h+='<div class="qrbox">'+qrSVG(q,140)+'</div>'+(state.qrLabel?'<div class="qrcap">'+esc(state.qrLabel)+'</div>':'');}
+if(state.footer)h+='<div class="fl">'+esc(state.footer)+'</div>';
+h+='</div>';
+m.innerHTML=h;
+}
+
+/* text */
+function menuText(){
+var L=[];
+L.push('*'+(state.name||'Menu')+'*');
+if(state.tagline)L.push('_'+state.tagline+'_');
+groups().forEach(function(gr){
+L.push('');L.push('*'+gr.cat+'*');
+gr.items.forEach(function(it){
+var line='• '+it.name;
+if(it.qty)line+=' ('+it.qty+')';
+var p=fmtPrice(it.price);if(p)line+=' – '+p;
+if(it.badge)line+=' ['+it.badge+']';
+L.push(line);
+if(it.desc)L.push('   '+it.desc);
+if(state.showIng!==false&&it.ingredients)L.push('   Ingredients: '+it.ingredients);
+});
+});
+L.push('');
+if(state.orderInfo)L.push(state.orderInfo);
+if(state.pickup)L.push(state.pickup);
+if(state.contact)L.push(state.contact);
+if(String(state.qr||'').trim())L.push((state.qrLabel||'Order')+': '+String(state.qr).trim());
+if(state.footer)L.push(state.footer);
+return L.join('\n');
+}
+function say(msg,bad){var s=$('status');s.textContent=msg;s.style.color=bad?'#8A2A2A':'#2F5D3A';}
+$('copyText').addEventListener('click',function(){
+var t=menuText();
+function fallback(){
+var ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();
+var ok=false;try{ok=document.execCommand('copy');}catch(e){}
+document.body.removeChild(ta);
+say(ok?'Copied. Paste it into WhatsApp, Instagram, or Facebook.':'Copy was blocked. Select the preview text and copy it manually.',!ok);
+}
+try{navigator.clipboard.writeText(t).then(function(){say('Copied. Paste it into WhatsApp, Instagram, or Facebook.');},fallback);}catch(e){fallback();}
+});
+
+/* canvas */
+function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
+function cFlower(c,cx,cy,s,T){
+var cols=[T.pa,T.pb];
+for(var i=0;i<8;i++){
+c.save();c.translate(cx,cy);c.rotate(i*Math.PI/4);
+c.fillStyle=cols[i%2];c.beginPath();c.ellipse(0,-30*s,11*s,26*s,0,0,Math.PI*2);c.fill();c.restore();
+}
+c.fillStyle=T.head;c.beginPath();c.arc(cx,cy,14*s,0,Math.PI*2);c.fill();
+c.fillStyle=T.ht;c.beginPath();c.arc(cx,cy,7*s,0,Math.PI*2);c.fill();
+}
+function cIcon(c,cat,x,y,size,color){
+c.save();c.translate(x,y);c.scale(size/24,size/24);
+c.strokeStyle=color;c.lineWidth=2;c.lineCap='round';c.lineJoin='round';
+c.stroke(new Path2D(ICONS[iconFor(cat)]));c.restore();
+}
+function wrapLines(c,text,maxW){
+var words=String(text).split(/\s+/),lines=[],cur='';
+for(var i=0;i<words.length;i++){
+var t=cur?cur+' '+words[i]:words[i];
+if(c.measureText(t).width>maxW&&cur){lines.push(cur);cur=words[i];}else cur=t;
+}
+if(cur)lines.push(cur);
+if(lines.length>3){lines=lines.slice(0,3);lines[2]=lines[2].replace(/\s*\S*$/,'')+'…';}
+return lines;
+}
+function drawImage(){
+var T=THEMES[state.theme]||THEMES.classic,W=1080,P=72,g=groups();
+var headerH=320,photoH=photo?340:0,q=qrModel();
+var tc=document.createElement('canvas').getContext('2d');tc.font='italic 400 21px Inter,Arial,sans-serif';
+g.forEach(function(gr){gr.items.forEach(function(it){it._il=(state.showIng!==false&&it.ingredients)?wrapLines(tc,'Ingredients: '+it.ingredients,W-2*P):[];});});
+var rows=0,body=0;
+g.forEach(function(gr){body+=70;gr.items.forEach(function(it){body+=76+(it.desc?34:0)+it._il.length*28;rows++;});body+=26;});
+if(!g.length)body=80;
+var foot=40;
+if(state.orderInfo)foot+=52;
+if(state.pickup)foot+=52;
+if(state.contact)foot+=52;
+if(q)foot+=300;
+if(state.footer)foot+=48;
+foot+=40;
+var top=headerH+photoH+78;
+var Hn=top+body+foot;
+var mode=SIZES[state.size]||SIZES.post;
+var s=1,H=Hn,extra=0;
+if(mode.h){H=mode.h;if(Hn>H)s=H/Hn;else extra=Math.min(30,(H-Hn)/Math.max(1,rows));}
+var Wv=W/s,Hv=H/s;
+var cv=document.createElement('canvas');cv.width=W;cv.height=Math.round(H);
+var c=cv.getContext('2d');
+c.scale(s,s);
+c.fillStyle=T.bg;c.fillRect(0,0,Wv,Hv);
+c.fillStyle=T.head;c.fillRect(0,0,Wv,headerH);
+cFlower(c,Wv/2,100,1.15,T);
+c.textAlign='center';c.textBaseline='alphabetic';
+c.fillStyle=T.ht;c.font='700 62px "Playfair Display",Georgia,serif';
+c.fillText(state.name||'Menu',Wv/2,228,Wv-2*P);
+if(state.tagline){c.fillStyle=T.a2;c.font='500 24px Inter,Arial,sans-serif';
+c.fillText(state.tagline.toUpperCase().split('').join(' '),Wv/2,274,Wv-2*P);}
+if(photo){
+c.save();c.beginPath();c.rect(0,headerH,Wv,photoH);c.clip();
+var sc=Math.max(Wv/photo.naturalWidth,photoH/photo.naturalHeight),pw=photo.naturalWidth*sc,ph=photo.naturalHeight*sc;
+c.drawImage(photo,(Wv-pw)/2,headerH+(photoH-ph)/2,pw,ph);c.restore();
+}
+c.fillStyle=T.a;c.fillRect(0,headerH+photoH,Wv,8);
+var y=top+0;
+c.textAlign='left';
+g.forEach(function(gr){
+cIcon(c,gr.cat,P,y-34,40,T.c);
+c.fillStyle=T.c;c.font='700 40px "Playfair Display",Georgia,serif';c.fillText(gr.cat,P+56,y,Wv-2*P-56);
+c.fillStyle=T.a;c.fillRect(P,y+14,Wv-2*P,4);
+y+=70;
+gr.items.forEach(function(it){
+var price=fmtPrice(it.price);
+c.font='700 32px Inter,Arial,sans-serif';
+var priceW=c.measureText(price).width;
+c.fillStyle=T.p;c.textAlign='right';c.fillText(price,Wv-P,y);c.textAlign='left';
+c.fillStyle=T.ink;c.font='600 32px Inter,Arial,sans-serif';
+c.fillText(it.name,P,y,Wv-2*P-priceW-20);
+var x=P+Math.min(c.measureText(it.name).width,Wv-2*P-priceW-20)+14;
+if(it.qty){c.fillStyle=T.mu;c.font='400 24px Inter,Arial,sans-serif';c.fillText(it.qty,x,y);x+=c.measureText(it.qty).width+14;}
+if(it.badge){
+c.font='700 19px Inter,Arial,sans-serif';
+var bw=c.measureText(it.badge).width+26;
+c.fillStyle=T.a;rr(c,x,y-25,bw,32,16);c.fill();
+c.fillStyle=T.head;c.textBaseline='middle';c.fillText(it.badge,x+13,y-8);c.textBaseline='alphabetic';
+x+=bw+14;
+}
+var endX=Wv-P-priceW-14;
+if(endX>x){c.fillStyle=T.dot;for(var dx=x;dx<endX;dx+=10){c.beginPath();c.arc(dx,y-6,2,0,Math.PI*2);c.fill();}}
+if(it.desc){c.fillStyle=T.mu;c.font='400 22px Inter,Arial,sans-serif';c.fillText(it.desc,P,y+30,Wv-2*P);y+=34;}
+it._il.forEach(function(ln){c.fillStyle=T.mu;c.font='italic 400 21px Inter,Arial,sans-serif';c.fillText(ln,P,y+30,Wv-2*P);y+=28;});
+y+=76+extra;
+});
+y+=26;
+});
+if(!g.length)y+=60;
+y=Math.max(y,Hv-foot);
+c.textAlign='center';
+y+=10;
+if(state.orderInfo){c.fillStyle=T.ink;c.font='600 28px Inter,Arial,sans-serif';c.fillText(state.orderInfo,Wv/2,y+16,Wv-2*P);y+=52;}
+if(state.pickup){c.fillStyle=T.mu;c.font='400 26px Inter,Arial,sans-serif';c.fillText(state.pickup,Wv/2,y+16,Wv-2*P);y+=52;}
+if(state.contact){c.fillStyle=T.mu;c.font='400 26px Inter,Arial,sans-serif';c.fillText(state.contact,Wv/2,y+16,Wv-2*P);y+=52;}
+if(q){
+var n=q.getModuleCount(),mod=Math.floor(220/(n+2)),tot=mod*(n+2),qx=(Wv-tot)/2,qy=y+10;
+c.fillStyle='#FFFFFF';rr(c,qx-10,qy-10,tot+20,tot+20,14);c.fill();
+c.fillStyle='#1A1A1A';
+for(var r=0;r<n;r++)for(var cc=0;cc<n;cc++)if(q.isDark(r,cc))c.fillRect(qx+(cc+1)*mod,qy+(r+1)*mod,mod,mod);
+y=qy+tot+10;
+if(state.qrLabel){c.fillStyle=T.c;c.font='600 26px Inter,Arial,sans-serif';c.fillText(state.qrLabel,Wv/2,y+24,Wv-2*P);}
+y+=60;
+}
+if(state.footer){c.fillStyle=T.mu;c.font='italic 400 22px Inter,Arial,sans-serif';c.fillText(state.footer,Wv/2,y+16,Wv-2*P);}
+return cv;
+}
+
+$('makeImg').addEventListener('click',function(){
+say('Making image…');
+var go=function(){
+var cv;
+try{cv=drawImage();}catch(e){say('Could not make the image.',true);return;}
+cv.toBlob(function(b){
+if(!b){say('Could not make the image.',true);return;}
+var url=URL.createObjectURL(b),box=$('imgbox');
+box.innerHTML='<img alt="Your menu as an image" src="'+url+'"><p class="small">Take a screenshot of the image above and post that. (Some phones and browsers do not offer Save inside this page. On a computer, right-click the image and choose Save image as.)</p>';
+var done='Image ready below. Take a screenshot of it to post.';
+try{navigator.clipboard.write([new ClipboardItem({'image/png':b})]).then(function(){say('Image copied and shown below. Paste it into your post, or take a screenshot of it.');},function(){say(done);});}catch(e){say(done);}
+},'image/png');
+};
+if(document.fonts&&document.fonts.load){
+Promise.all([document.fonts.load('700 40px "Playfair Display"'),document.fonts.load('600 32px Inter'),document.fonts.load('700 32px Inter'),document.fonts.load('400 24px Inter')]).then(go,go);
+}else go();
+});
+
+function encodeState(){return btoa(unescape(encodeURIComponent(JSON.stringify(state))));}
+function applyState(o){
+var st=JSON.parse(JSON.stringify(defaults));
+Object.keys(st).forEach(function(k){if(k!=='items'&&o[k]!==undefined)st[k]=o[k];});
+st.items=o.items.map(function(it){return {cat:it.cat||'',name:it.name||'',qty:it.qty||'',price:it.price||'',badge:it.badge||'',desc:it.desc||'',ingredients:it.ingredients||''};});
+if(!THEMES[st.theme])st.theme='classic';
+if(!SIZES[st.size])st.size='post';
+state=st;save();
+[['bn','name'],['tg','tagline'],['oi','orderInfo'],['pk','pickup'],['ct','contact'],['qr','qr'],['qc','qrLabel'],['ft','footer']].forEach(function(p){$(p[0]).value=state[p[1]]||'';});
+sz.value=state.size;$('si').checked=state.showIng!==false;
+renderThemes();renderItems();renderMenu();
+}
+function cs(msg,bad){var e=$('codeStatus');e.textContent=msg;e.style.color=bad?'#8A2A2A':'#2F5D3A';}
+$('copyCode').addEventListener('click',function(){
+var t=encodeState();
+function fb(){
+var ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();
+var ok=false;try{ok=document.execCommand('copy');}catch(e){}
+document.body.removeChild(ta);
+if(ok)cs('Menu code copied. Send it to yourself or someone else.');else{$('codeIn').value=t;cs('Copy was blocked. The code is in the box below. Select it and copy it.',true);}
+}
+try{navigator.clipboard.writeText(t).then(function(){cs('Menu code copied. Send it to yourself or someone else.');},fb);}catch(e){fb();}
+});
+$('loadCode').addEventListener('click',function(){
+var v=$('codeIn').value.trim();
+if(!v){cs('Paste a menu code first.',true);return;}
+try{
+var o=JSON.parse(decodeURIComponent(escape(atob(v))));
+if(!o||!Array.isArray(o.items))throw new Error('bad');
+applyState(o);$('codeIn').value='';cs('Menu loaded.');
+}catch(e){cs('That code did not work. Copy the whole code again and retry.',true);}
+});
+
+renderThemes();renderItems();renderMenu();
+})();
+</script>
+</body>
+</html>
